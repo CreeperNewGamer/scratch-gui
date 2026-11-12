@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TurboWarp - Run Scratch projects faster</title>
+    <link rel="icon" href="./favicon.ico">
+    <script>
+      // Preserve project IDs and query parameters when opening the editor.
+      location.replace('./editor.html' + location.search + location.hash);
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content="0; url=./editor.html">
+    </noscript>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        background: #e9f1fc;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      a {
+        color: #4c97ff;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Opening the editor&hellip; <a href="./editor.html">Click here if nothing happens.</a></p>
+  </body>
+</html>

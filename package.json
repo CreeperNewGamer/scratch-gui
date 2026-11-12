@@ -12,8 +12,10 @@
   "main": "./dist/scratch-gui.js",
   "scripts": {
     "build": "npm run clean && webpack --colors --bail",
+    "build:pages": "ROOT=/scratch-gui/ npm run build && cp build/index.html build/player.html && cp scripts/pages-index.html build/index.html && touch build/.nojekyll",
     "clean": "rimraf ./build && mkdirp build && rimraf ./dist && mkdirp dist",
     "deploy": "touch build/.nojekyll && gh-pages -t -d build -m \"[skip ci] Build for $(git log --pretty=format:%H -n1)\"",
+    "deploy:github": "npm run build:pages && gh-pages -t -d build -b gh-pages -r https://github.com/CreeperNewGamer/scratch-gui.git -f -m \"Deploy editor\"",
     "prepublish": "node scripts/prepublish.mjs",
     "prune": "./prune-gh-pages.sh",
     "i18n:push": "tx-push-src scratch-editor interface translations/en.json",
