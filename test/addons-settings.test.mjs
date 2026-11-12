@@ -37,10 +37,10 @@ test('enabled, event', () => {
     assert.equal(store.getAddonEnabled('editor-devtools'), false);
     assert.equal('enabled' in store.store['editor-devtools'], true);
     store.setAddonEnabled('editor-devtools', true);
-    store.setAddonEnabled('cat-blocks', true);
-    assert.equal('enabled' in store.store['cat-blocks'], true);
-    store.setAddonEnabled('cat-blocks', null);
-    assert.equal('enabled' in store.store['cat-blocks'], false);
+    store.setAddonEnabled('block-palette-icons', true);
+    assert.equal('enabled' in store.store['block-palette-icons'], true);
+    store.setAddonEnabled('block-palette-icons', null);
+    assert.equal('enabled' in store.store['block-palette-icons'], false);
     assert.equal(fn.mock.callCount(), 4);
     assert.equal(fn.mock.calls[0].arguments[0].detail.addonId, 'editor-devtools');
     assert.equal(fn.mock.calls[0].arguments[0].detail.settingId, 'enabled');
@@ -48,10 +48,10 @@ test('enabled, event', () => {
     assert.equal(fn.mock.calls[1].arguments[0].detail.addonId, 'editor-devtools');
     assert.equal(fn.mock.calls[1].arguments[0].detail.settingId, 'enabled');
     assert.equal(fn.mock.calls[1].arguments[0].detail.value, true);
-    assert.equal(fn.mock.calls[2].arguments[0].detail.addonId, 'cat-blocks');
+    assert.equal(fn.mock.calls[2].arguments[0].detail.addonId, 'block-palette-icons');
     assert.equal(fn.mock.calls[2].arguments[0].detail.settingId, 'enabled');
     assert.equal(fn.mock.calls[2].arguments[0].detail.value, true);
-    assert.equal(fn.mock.calls[3].arguments[0].detail.addonId, 'cat-blocks');
+    assert.equal(fn.mock.calls[3].arguments[0].detail.addonId, 'block-palette-icons');
     assert.equal(fn.mock.calls[3].arguments[0].detail.settingId, 'enabled');
     assert.equal(fn.mock.calls[3].arguments[0].detail.value, false);
 });
@@ -81,9 +81,9 @@ test('no actual change emits no event', () => {
     const store = new SettingStore();
     const fn = mock.fn();
     store.addEventListener('setting-changed', fn);
-    for (let i = 0; i < 5; i++) store.setAddonEnabled('cat-blocks', true);
+    for (let i = 0; i < 5; i++) store.setAddonEnabled('block-palette-icons', true);
     assert.equal(fn.mock.callCount(), 1);
-    for (let i = 0; i < 5; i++) store.setAddonEnabled('cat-blocks', false);
+    for (let i = 0; i < 5; i++) store.setAddonEnabled('block-palette-icons', false);
     assert.equal(fn.mock.callCount(), 2);
     for (let i = 0; i < 5; i++) store.setAddonSetting('onion-skinning', 'default', true);
     assert.equal(fn.mock.callCount(), 3);
@@ -112,10 +112,10 @@ test('changing enabled throws on invalid values', () => {
     const store = new SettingStore();
     const fn = mock.fn();
     store.addEventListener('setting-changed', fn);
-    assert.throws(() => store.setAddonEnabled('cat-blocks', 'sdfjlksdflk'));
-    assert.throws(() => store.setAddonEnabled('cat-blocks', 0));
-    assert.throws(() => store.setAddonEnabled('cat-blocks', []));
-    assert.throws(() => store.setAddonEnabled('cat-blocks', {}));
+    assert.throws(() => store.setAddonEnabled('block-palette-icons', 'sdfjlksdflk'));
+    assert.throws(() => store.setAddonEnabled('block-palette-icons', 0));
+    assert.throws(() => store.setAddonEnabled('block-palette-icons', []));
+    assert.throws(() => store.setAddonEnabled('block-palette-icons', {}));
     assert.equal(fn.mock.callCount(), 0);
 });
 
@@ -178,9 +178,9 @@ test('colors with alpha channel', () => {
 
 test('reset does not change enabled', () => {
     const store = new SettingStore();
-    store.setAddonEnabled('cat-blocks', true);
-    store.resetAddon('cat-blocks');
-    assert.equal(store.getAddonEnabled('cat-blocks'), true);
+    store.setAddonEnabled('block-palette-icons', true);
+    store.resetAddon('block-palette-icons');
+    assert.equal(store.getAddonEnabled('block-palette-icons'), true);
 });
 
 test('reset settings, event', () => {
@@ -203,13 +203,13 @@ test('reset settings, event', () => {
 
 test('reset all addons', () => {
     const store = new SettingStore();
-    store.setAddonEnabled('cat-blocks', true);
+    store.setAddonEnabled('block-palette-icons', true);
     store.setAddonSetting('onion-skinning', 'default', true);
     const fn = mock.fn();
     store.addEventListener('setting-changed', fn);
     store.resetAllAddons();
     assert.equal(fn.mock.callCount(), 2);
-    assert.equal(fn.mock.calls[0].arguments[0].detail.addonId, 'cat-blocks');
+    assert.equal(fn.mock.calls[0].arguments[0].detail.addonId, 'block-palette-icons');
     assert.equal(fn.mock.calls[0].arguments[0].detail.settingId, 'enabled');
     assert.equal(fn.mock.calls[0].arguments[0].detail.value, false);
     assert.equal(fn.mock.calls[1].arguments[0].detail.addonId, 'onion-skinning');
@@ -301,7 +301,7 @@ test('export is identical after import', () => {
 
 test('import format', () => {
     const store = new SettingStore();
-    store.setAddonEnabled('cat-blocks', true);
+    store.setAddonEnabled('block-palette-icons', true);
     store.import({
         core: {
             version: 'lksd',
@@ -318,7 +318,7 @@ test('import format', () => {
     });
     assert.equal(store.getAddonEnabled('onion-skinning'), false);
     assert.equal(store.getAddonSetting('onion-skinning', 'next'), 7);
-    assert.equal(store.getAddonEnabled('cat-blocks'), true);
+    assert.equal(store.getAddonEnabled('block-palette-icons'), true);
 });
 
 test('invalid imports', () => {
@@ -360,7 +360,7 @@ test('invalid imports', () => {
 
 test('local storage', () => {
     const store = new SettingStore();
-    store.setAddonEnabled('cat-blocks', true);
+    store.setAddonEnabled('block-palette-icons', true);
     store.setAddonSetting('onion-skinning', 'default', true);
     const newStore = new SettingStore();
     newStore.readLocalStorage();
@@ -379,11 +379,11 @@ test('local storage is resistent to errors', () => {
     localStorage.setItem = () => {
         throw new Error(':(');
     };
-    store.setAddonEnabled('cat-blocks', true);
+    store.setAddonEnabled('block-palette-icons', true);
     // eslint-disable-next-line no-undefined
     globalThis.localStorage = undefined;
     store.readLocalStorage();
-    store.setAddonEnabled('cat-blocks', false);
+    store.setAddonEnabled('block-palette-icons', false);
 });
 
 test('setStore diffing', () => {
