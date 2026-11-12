@@ -1,8 +1,4 @@
 {
-    "cat-blocks/@description": "Ramener les blocs à tête de chat du poisson d'avril de 2020 dans l'éditeur.",
-    "cat-blocks/@info-watch": "L'option \"regarder le curseur\" peut impacter les performances quand l'éditeur est ouvert.",
-    "cat-blocks/@name": "Blocs chat",
-    "cat-blocks/@settings-name-watch": "Regarder le curseur",
     "editor-devtools/@description": "Ajoute de nouvelles options au menu de l'éditeur : copier/coller des blocs, meilleur nettoyage, et plus encore !",
     "editor-devtools/@name": "Outils pour développeurs",
     "editor-devtools/@settings-name-enableCleanUpPlus": "Améliorer l'option \"Nettoyer les blocs\"",
@@ -142,8 +138,6 @@
     "custom-block-shape/@settings-name-cornerSize": "Taille des coins (0-300%)",
     "custom-block-shape/@settings-name-notchSize": "Hauteur de l'entaille (0-150%)",
     "custom-block-shape/@settings-name-paddingSize": "Taille de la marge (50-200%)",
-    "editor-square-inputs/@settings-name-color": "Entrées de couleurs",
-    "editor-square-inputs/@settings-name-text": "Entrées de textes",
     "zebra-striping/@description": "Fait alterner les blocs de la même catégorie entre des nuances plus claires et plus foncées lorsqu'ils sont imbriqués les uns dans les autres. Ceci est également connu sous le nom de \"rayures zébrées\" (\"zebra striping\" en Anglais).",
     "zebra-striping/@name": "Alternance de la couleur des blocs imbriqués",
     "zebra-striping/@settings-name-intensity": "Intensité (0-100%)",

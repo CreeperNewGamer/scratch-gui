@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import Modal from '../../containers/modal.jsx';
+import fontIcon from '../language-selector/language-icon.svg';
 import ManageFont from './manage-font.jsx';
 import AddSystemFont from './add-system-font.jsx';
 import AddCustomFont, {FONT_FORMATS} from './add-custom-font.jsx';
@@ -21,6 +22,7 @@ const FontModal = props => (
         className={styles.modalContent}
         onRequestClose={props.onClose}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={fontIcon}
         id="fontModal"
     >
         <div className={styles.body}>

@@ -18,6 +18,8 @@ const MODAL_RESTORE_POINTS = 'restorePointModal';
 const MODAL_FONTS = 'fontsModal';
 const MODAL_UNKNOWN_PLATFORM = 'unknownPlatformModal';
 const MODAL_INVALID_PROJECT = 'invalidProjectModal';
+const MODAL_ADDON_SETTINGS = 'addonSettingsModal';
+const MODAL_ADDON_SETTINGS_FOCUS = 'addonSettingsFocus';
 
 const initialState = {
     [MODAL_BACKDROP_LIBRARY]: false,
@@ -36,7 +38,9 @@ const initialState = {
     [MODAL_RESTORE_POINTS]: false,
     [MODAL_FONTS]: false,
     [MODAL_UNKNOWN_PLATFORM]: false,
-    [MODAL_INVALID_PROJECT]: false
+    [MODAL_INVALID_PROJECT]: false,
+    [MODAL_ADDON_SETTINGS]: false,
+    [MODAL_ADDON_SETTINGS_FOCUS]: null
 };
 
 const reducer = function (state, action) {
@@ -44,11 +48,17 @@ const reducer = function (state, action) {
     switch (action.type) {
     case OPEN_MODAL:
         return Object.assign({}, state, {
-            [action.modal]: true
+            [action.modal]: true,
+            ...(action.modal === MODAL_ADDON_SETTINGS ? {
+                [MODAL_ADDON_SETTINGS_FOCUS]: action[MODAL_ADDON_SETTINGS_FOCUS] || null
+            } : {})
         });
     case CLOSE_MODAL:
         return Object.assign({}, state, {
-            [action.modal]: false
+            [action.modal]: false,
+            ...(action.modal === MODAL_ADDON_SETTINGS ? {
+                [MODAL_ADDON_SETTINGS_FOCUS]: null
+            } : {})
         });
     default:
         return state;
@@ -117,6 +127,13 @@ const openUnknownPlatformModal = function () {
 const openInvalidProjectModal = function () {
     return openModal(MODAL_INVALID_PROJECT);
 };
+const openAddonSettingsModal = function (addonId) {
+    return {
+        type: OPEN_MODAL,
+        modal: MODAL_ADDON_SETTINGS,
+        [MODAL_ADDON_SETTINGS_FOCUS]: typeof addonId === 'string' ? addonId : null
+    };
+};
 const closeBackdropLibrary = function () {
     return closeModal(MODAL_BACKDROP_LIBRARY);
 };
@@ -168,6 +185,9 @@ const closeUnknownPlatformModal = function () {
 const closeInvalidProjectModal = function () {
     return closeModal(MODAL_INVALID_PROJECT);
 };
+const closeAddonSettingsModal = function () {
+    return closeModal(MODAL_ADDON_SETTINGS);
+};
 export {
     reducer as default,
     initialState as modalsInitialState,
@@ -188,6 +208,7 @@ export {
     openFontsModal,
     openUnknownPlatformModal,
     openInvalidProjectModal,
+    openAddonSettingsModal,
     closeBackdropLibrary,
     closeCostumeLibrary,
     closeExtensionLibrary,
@@ -204,5 +225,6 @@ export {
     closeRestorePointModal,
     closeFontsModal,
     closeUnknownPlatformModal,
-    closeInvalidProjectModal
+    closeInvalidProjectModal,
+    closeAddonSettingsModal
 };

@@ -1,0 +1,40 @@
+@import "../../css/colors.css";
+
+.modalContent {
+    width: 1000px;
+    max-width: calc(100vw - 80px);
+    height: 800px;
+    max-height: calc(100vh - 220px);
+    display: flex;
+    flex-direction: column;
+    background-color: $ui-modal-background;
+    color: $text-primary;
+}
+
+/* Modal's Box wrapper needs to become a flex column so the settings body
+   can fill the remaining height and scroll internally. */
+.modalContent > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.body > * {
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 700px) {
+    .modalContent {
+        width: calc(100vw - 40px);
+        max-width: none;
+        max-height: calc(100vh - 140px);
+    }
+}

@@ -7,6 +7,7 @@ import MenuBarMenu from './menu-bar-menu.jsx';
 import {MenuSection} from '../menu/menu.jsx';
 import MenuLabel from './tw-menu-label.jsx';
 import TWAccentThemeMenu from './tw-theme-accent.jsx';
+import TWCatBlocksThemeMenu from './tw-theme-cat-blocks.jsx';
 import TWGuiThemeMenu from './tw-theme-gui.jsx';
 import TWBlocksThemeMenu from './tw-theme-blocks.jsx';
 import TWDesktopSettings from './tw-desktop-settings.jsx';
@@ -64,6 +65,7 @@ const SettingsMenu = ({
                         <TWBlocksThemeMenu
                             onOpenCustomSettings={onOpenCustomSettings}
                         />
+                        <TWCatBlocksThemeMenu />
                         <TWAccentThemeMenu />
                     </React.Fragment>
                 )}

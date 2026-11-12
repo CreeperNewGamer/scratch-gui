@@ -47,7 +47,6 @@ import '../../lib/normalize.css';
 // messagesByLocale only has the non-English strings, so we have to add English as a supported
 // locale so that a non-English device with their editor language set to English gets English.
 const locale = detectLocale(['en', ...Object.keys(messagesByLocale)]);
-document.documentElement.lang = locale;
 
 const addonTranslations = messagesByLocale[locale] ? messagesByLocale[locale]() : {};
 
@@ -59,9 +58,8 @@ if (locale !== 'en') {
     }
 }
 
-document.title = `${settingsTranslations.title} - ${APP_NAME}`;
-const theme = detectTheme();
-applyGuiColors(theme);
+// Theme is applied on mount so embedding the settings in the editor does not
+// overwrite the editor's current theme (which may include custom block colors).
 
 let _throttleTimeout;
 const postThrottledSettingsChange = store => {
@@ -126,18 +124,18 @@ const groupAddons = () => {
 };
 const groupedAddons = groupAddons();
 
-const getInitialSearch = () => {
-    const hash = location.hash.substring(1);
-    
+const getSearchForAddon = value => {
     // If the query is an addon ID, it's a better user experience to show the name of the addon
     // in the search bar instead of a ID they won't understand.
-    if (Object.prototype.hasOwnProperty.call(importedAddons, hash)) {
-        const manifest = importedAddons[hash];
-        return addonTranslations[`${hash}/@name`] || manifest.name;
+    if (Object.prototype.hasOwnProperty.call(importedAddons, value)) {
+        const manifest = importedAddons[value];
+        return addonTranslations[`${value}/@name`] || manifest.name;
     }
 
-    return hash;
+    return value;
 };
+
+const getInitialSearch = () => getSearchForAddon(location.hash.substring(1));
 
 const clearHash = () => {
     // Don't want to insert unnecssary history entry
@@ -915,11 +913,15 @@ class AddonSettingsComponent extends React.Component {
         this.handleClickSearchButton = this.handleClickSearchButton.bind(this);
         this.handleClickVersion = this.handleClickVersion.bind(this);
         this.searchRef = this.searchRef.bind(this);
+        this.containerRef = this.containerRef.bind(this);
         this.searchBar = null;
+        this.container = null;
         this.state = {
             loading: false,
             dirty: false,
-            search: getInitialSearch(),
+            search: this.props.initialSearch ?
+                getSearchForAddon(this.props.initialSearch) :
+                (this.props.embedded ? '' : getInitialSearch()),
             extended: false,
             ...this.readFullAddonState()
         };
@@ -933,9 +935,15 @@ class AddonSettingsComponent extends React.Component {
     componentDidMount () {
         SettingsStore.addEventListener('setting-changed', this.handleSettingStoreChanged);
         document.body.addEventListener('keydown', this.handleKeyDown);
+        if (!this.props.embedded) {
+            const theme = detectTheme();
+            applyGuiColors(theme);
+            document.documentElement.lang = locale;
+            document.title = `${settingsTranslations.title} - ${APP_NAME}`;
+        }
     }
     componentDidUpdate (prevProps, prevState) {
-        if (this.state.search !== prevState.search) {
+        if (!this.props.embedded && this.state.search !== prevState.search) {
             clearHash();
         }
     }
@@ -982,6 +990,10 @@ class AddonSettingsComponent extends React.Component {
         }
     }
     handleReloadNow () {
+        if (this.props.onReload) {
+            this.props.onReload();
+            return;
+        }
         // Value posted does not matter
         Channels.reloadChannel.postMessage(0);
         this.setState({
@@ -1062,7 +1074,14 @@ class AddonSettingsComponent extends React.Component {
             searchBar.focus();
         }
     }
+    containerRef (container) {
+        this.container = container;
+    }
     handleKeyDown (e) {
+        // In the editor, only handle shortcuts while the dialog itself has focus.
+        if (this.props.embedded && (!this.container || !this.container.contains(e.target))) {
+            return;
+        }
         const key = e.key;
         if (key.length === 1 && key !== ' ' && e.target === document.body && !(e.ctrlKey || e.metaKey || e.altKey)) {
             this.searchBar.focus();
@@ -1085,7 +1104,10 @@ class AddonSettingsComponent extends React.Component {
             manifest
         }));
         return (
-            <div className={styles.container}>
+            <div
+                className={classNames(styles.container, {[styles.embedded]: this.props.embedded})}
+                ref={this.containerRef}
+            >
                 <div className={styles.header}>
                     <div className={styles.section}>
                         <div className={styles.searchContainer}>
@@ -1116,7 +1138,11 @@ class AddonSettingsComponent extends React.Component {
                     </div>
                     {this.state.dirty && (
                         <Dirty
-                            onReloadNow={Channels.reloadChannel ? this.handleReloadNow : null}
+                            onReloadNow={
+                                (this.props.onReload || Channels.reloadChannel) ?
+                                    this.handleReloadNow :
+                                    null
+                            }
                         />
                     )}
                 </div>
@@ -1173,7 +1199,10 @@ class AddonSettingsComponent extends React.Component {
     }
 }
 AddonSettingsComponent.propTypes = {
-    onExportSettings: PropTypes.func
+    embedded: PropTypes.bool,
+    initialSearch: PropTypes.string,
+    onExportSettings: PropTypes.func,
+    onReload: PropTypes.func
 };
 
 export default AddonSettingsComponent;

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Box from '../box/box.jsx';
 import Modal from '../../containers/modal.jsx';
+import userIcon from '../../lib/assets/dialog-icons/user.svg';
 import classNames from 'classnames';
 
 import styles from './username-modal.css';
@@ -21,6 +22,7 @@ const UsernameModalComponent = props => (
         className={styles.modalContent}
         onRequestClose={props.onCancel}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={userIcon}
         id="usernameModal"
     >
         <Box className={styles.body}>

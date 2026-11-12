@@ -1,8 +1,4 @@
 {
-    "cat-blocks/@description": "Przywraca do edytora kocie bloki z Prima Aprilis 2020.",
-    "cat-blocks/@info-watch": "Opcja „Obserwuj kursor myszy” może wpływać na wydajność, gdy edytor jest otwarty.",
-    "cat-blocks/@name": "Kocie Bloki",
-    "cat-blocks/@settings-name-watch": "Patrz na kursor myszy",
     "editor-devtools/@name": "Narzędzia Developerskie",
     "editor-devtools/@settings-name-enableCleanUpPlus": "Ulepszone „Wyczyść bloki”",
     "editor-devtools/@settings-name-enablePasteBlocksAtMouse": "Wklej bloki w miejscu kursora myszy",
@@ -114,7 +110,6 @@
     "custom-block-shape/@settings-name-cornerSize": "Rozmiar zaokrąglenia rogów (0--300%)",
     "custom-block-shape/@settings-name-notchSize": "Wielkość nacięcia (0-150%) ",
     "custom-block-shape/@settings-name-paddingSize": "Rozmiar obramowania (50-200%)",
-    "editor-square-inputs/@name": "Kwadratowe wejścia tekstowe bloków",
     "zebra-striping/@settings-name-intensity": "Intensywność (0-100%)",
     "zebra-striping/@settings-name-shade": "Cień",
     "zebra-striping/@settings-select-shade-darker": "Ciemniej",

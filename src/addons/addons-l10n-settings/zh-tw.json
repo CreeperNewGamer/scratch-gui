@@ -1,7 +1,4 @@
 {
-    "cat-blocks/@info-watch": "“觀察鼠標光標”設置可能會影響編輯器打開時的性能。",
-    "cat-blocks/@name": "貓積木",
-    "cat-blocks/@settings-name-watch": "注視游標",
     "editor-devtools/@description": "向編輯器添加新的列表選項：複製 / 貼上、更好地清理等！",
     "editor-devtools/@name": "開發者工具",
     "editor-devtools/@settings-name-enableCleanUpPlus": "增強的「整理積木」功能",

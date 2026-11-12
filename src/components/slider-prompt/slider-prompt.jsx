@@ -5,6 +5,7 @@ import React from 'react';
 import Box from '../box/box.jsx';
 import Modal from '../../containers/modal.jsx';
 
+import sliderIcon from '../../lib/assets/dialog-icons/slider.svg';
 import styles from './slider-prompt.css';
 
 
@@ -30,6 +31,7 @@ const SliderPromptComponent = props => (
     <Modal
         className={styles.modalContent}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={sliderIcon}
         id="sliderPrompt"
         onRequestClose={props.onCancel}
     >

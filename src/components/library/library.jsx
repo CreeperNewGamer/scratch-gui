@@ -13,8 +13,23 @@ import Spinner from '../spinner/spinner.jsx';
 import Separator from '../tw-extension-separator/separator.jsx';
 import RemovedTrademarks from '../tw-removed-trademarks/removed-trademarks.jsx';
 import {APP_NAME} from '../../lib/brand.js';
+import backdropIcon from '../action-menu/icon--backdrop.svg';
+import costumeIcon from '../gui/icon--costumes.svg';
+import extensionIcon from '../gui/icon--extensions.svg';
+import soundIcon from '../gui/icon--sounds.svg';
+import spriteIcon from '../action-menu/icon--sprite.svg';
+import tutorialsIcon from '../../lib/assets/icon--tutorials.svg';
 
 import styles from './library.css';
+
+const LIBRARY_ICONS = {
+    backdropLibrary: backdropIcon,
+    costumeLibrary: costumeIcon,
+    extensionLibrary: extensionIcon,
+    soundLibrary: soundIcon,
+    spriteLibrary: spriteIcon,
+    tipsLibrary: tutorialsIcon
+};
 
 const messages = defineMessages({
     filterPlaceholder: {
@@ -258,6 +273,7 @@ class LibraryComponent extends React.Component {
             <Modal
                 fullScreen
                 contentLabel={this.props.title}
+                headerIcon={LIBRARY_ICONS[this.props.id]}
                 id={this.props.id}
                 onRequestClose={this.handleClose}
             >

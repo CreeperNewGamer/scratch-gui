@@ -1,8 +1,4 @@
 {
-    "cat-blocks/@description": "İlk olarak 1 Nisan 2020 günü için eklenen düzenleyici kedi şapkası bloklarını geri getirir.",
-    "cat-blocks/@info-watch": "\"Fare imlecini izle\" ayarı, düzenleyici açıkken performansı etkileyebilir.",
-    "cat-blocks/@name": "Kedi blokları",
-    "cat-blocks/@settings-name-watch": "Fare imlecini izle",
     "editor-devtools/@description": "Düzenleyiciye yeni menü seçenekleri ekler: blokları kopyalama/yapıştırma, daha iyi çekidüzen verme ve çok daha fazlası!",
     "editor-devtools/@name": "Geliştirici araçları",
     "editor-devtools/@settings-name-enableCleanUpPlus": "\"Blokları temizle\"yi geliştir",
@@ -147,8 +143,6 @@
     "custom-block-shape/@settings-name-cornerSize": "Köşe boyutu (%0-300)",
     "custom-block-shape/@settings-name-notchSize": "Çentik yüksekliği (%0-150)",
     "custom-block-shape/@settings-name-paddingSize": "Dolgu boyutu (%50-200)",
-    "editor-square-inputs/@settings-name-color": "Renk girişleri",
-    "editor-square-inputs/@settings-name-text": "Metin girişleri",
     "zebra-striping/@description": "Aynı tür blokların, birbiri içine yerleştirildiğinde açık ve koyu tonlar arasında geçiş yapmasını sağlar. Bu aynı zamanda zebra çizgileri olarak da bilinir.",
     "zebra-striping/@name": "İç içe olan blok renklerini değiştir",
     "zebra-striping/@settings-name-intensity": "Yoğunluk (%0-100)",

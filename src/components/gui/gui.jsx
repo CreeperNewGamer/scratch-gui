@@ -35,6 +35,7 @@ import TWSecurityManager from '../../containers/tw-security-manager.jsx';
 import TWCustomExtensionModal from '../../containers/tw-custom-extension-modal.jsx';
 import TWRestorePointManager from '../../containers/tw-restore-point-manager.jsx';
 import TWFontsModal from '../../containers/tw-fonts-modal.jsx';
+import TWAddonSettingsModal from '../../containers/tw-addon-settings-modal.jsx';
 import TWUnknownPlatformModal from '../../containers/tw-unknown-platform-modal.jsx';
 import TWInvalidProjectModal from '../../containers/tw-invalid-project-modal.jsx';
 
@@ -156,6 +157,8 @@ const GUIComponent = props => {
         settingsModalVisible,
         customExtensionModalVisible,
         fontsModalVisible,
+        addonSettingsModalVisible,
+        addonSettingsFocus,
         unknownPlatformModalVisible,
         invalidProjectModalVisible,
         vm,
@@ -190,6 +193,9 @@ const GUIComponent = props => {
                 {settingsModalVisible && <TWSettingsModal />}
                 {customExtensionModalVisible && <TWCustomExtensionModal />}
                 {fontsModalVisible && <TWFontsModal />}
+                {addonSettingsModalVisible && (
+                    <TWAddonSettingsModal initialSearch={addonSettingsFocus} />
+                )}
                 {unknownPlatformModalVisible && <TWUnknownPlatformModal />}
                 {invalidProjectModalVisible && <TWInvalidProjectModal />}
             </React.Fragment>
@@ -538,6 +544,8 @@ GUIComponent.propTypes = {
     settingsModalVisible: PropTypes.bool,
     customExtensionModalVisible: PropTypes.bool,
     fontsModalVisible: PropTypes.bool,
+    addonSettingsModalVisible: PropTypes.bool,
+    addonSettingsFocus: PropTypes.string,
     unknownPlatformModalVisible: PropTypes.bool,
     invalidProjectModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired

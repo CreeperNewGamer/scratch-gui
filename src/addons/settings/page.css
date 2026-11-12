@@ -1,0 +1,23 @@
+/**
+ * Page-level styles for the standalone addon settings page.
+ * These are intentionally not part of settings.css so that loading the
+ * settings UI inside the editor's dialog doesn't restyle the editor.
+ */
+
+@import "../../css/colors.css";
+
+body {
+    background-color: $page-background;
+    color: $page-foreground;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+}
+
+a[href] {
+    color: $link-color;
+    text-decoration: underline;
+}
+a:active, a:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px $looks-transparent;
+}

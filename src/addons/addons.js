@@ -1,7 +1,6 @@
 // This file is only used by pull.js to generate files. It is not used at runtime.
 
 const addons = [
-    'cat-blocks',
     'editor-devtools',
     'find-bar',
     'middle-click-popup',
@@ -31,7 +30,6 @@ const addons = [
     'better-img-uploads',
     'pick-colors-from-stage',
     'custom-block-shape',
-    'editor-square-inputs',
     'zebra-striping',
     'editor-compact',
     'custom-menu-bar',

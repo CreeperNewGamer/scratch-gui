@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {APP_NAME} from '../../lib/brand.js';
 import Modal from '../../containers/modal.jsx';
+import platformIcon from '../sound-editor/icon--robot.svg';
 import styles from './unknown-platform-modal.css';
 
 const messages = defineMessages({
@@ -32,6 +33,7 @@ const UnknownPlatformModal = props => (
         className={styles.modalContent}
         onRequestClose={props.onClose}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={platformIcon}
         id="unknownPlatformModal"
     >
         <div className={styles.body}>

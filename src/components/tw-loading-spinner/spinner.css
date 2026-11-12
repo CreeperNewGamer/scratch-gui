@@ -8,11 +8,11 @@
     justify-content: center;
 }
 .spinner {
-    width: 64px;
-    height: 64px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: 6px solid;
-    border-color: $looks-secondary transparent $looks-secondary transparent;
+    border: 2px solid $looks-transparent;
+    border-top-color: $looks-secondary;
     animation: spinner 1.2s linear infinite;
 }
 @keyframes spinner {

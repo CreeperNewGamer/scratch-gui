@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactModal from 'react-modal';
 import {FormattedMessage} from 'react-intl';
 
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import CloseButton from '../close-button/close-button.jsx';
+import DraggableModal from './draggable-modal.jsx';
 
 import backIcon from '../../lib/assets/icon--back.svg';
 import helpIcon from '../../lib/assets/icon--help.svg';
@@ -14,12 +14,13 @@ import helpIcon from '../../lib/assets/icon--help.svg';
 import styles from './modal.css';
 
 const ModalComponent = props => (
-    <ReactModal
+    <DraggableModal
         isOpen
         className={classNames(styles.modalContent, props.className, {
             [styles.fullScreen]: props.fullScreen
         })}
         contentLabel={props.contentLabel}
+        draggable={!props.fullScreen}
         overlayClassName={styles.modalOverlay}
         onRequestClose={props.onRequestClose}
     >
@@ -28,7 +29,10 @@ const ModalComponent = props => (
             direction="column"
             grow={1}
         >
-            <div className={classNames(styles.header, props.headerClassName)}>
+            <div
+                className={classNames(styles.header, props.headerClassName)}
+                data-modal-drag-handle
+            >
                 {props.onHelp ? (
                     <div
                         className={classNames(
@@ -54,7 +58,16 @@ const ModalComponent = props => (
                         styles.headerItem,
                         styles.headerItemTitle
                     )}
+                    data-modal-drag-handle
                 >
+                    {props.headerIcon ? (
+                        <img
+                            className={styles.headerIcon}
+                            src={props.headerIcon}
+                            draggable={false}
+                            alt=""
+                        />
+                    ) : null}
                     {props.headerImage ? (
                         <img
                             className={styles.headerImage}
@@ -92,7 +105,7 @@ const ModalComponent = props => (
             </div>
             {props.children}
         </Box>
-    </ReactModal>
+    </DraggableModal>
 );
 
 ModalComponent.propTypes = {
@@ -104,6 +117,7 @@ ModalComponent.propTypes = {
     ]).isRequired,
     fullScreen: PropTypes.bool,
     headerClassName: PropTypes.string,
+    headerIcon: PropTypes.string,
     headerImage: PropTypes.string,
     isRtl: PropTypes.bool,
     onHelp: PropTypes.func,

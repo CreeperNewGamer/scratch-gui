@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactModal from 'react-modal';
-import Box from '../box/box.jsx';
+import {setAppElement} from 'react-modal';
 import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import Box from '../box/box.jsx';
+import DraggableModal from '../modal/draggable-modal.jsx';
 import {
     isRendererSupported,
     isNewFunctionSupported,
@@ -32,7 +33,7 @@ const BrowserModal = ({intl, ...props}) => {
     const title = props.onClickDesktopSettings ? messages.systemNotSupported : messages.browserNotSupported;
     const incompatibleUserscripts = findIncompatibleUserscripts();
     return (
-        <ReactModal
+        <DraggableModal
             isOpen
             className={styles.modalContent}
             contentLabel={intl.formatMessage(title)}
@@ -40,7 +41,10 @@ const BrowserModal = ({intl, ...props}) => {
             onRequestClose={noop}
         >
             <div dir={props.isRtl ? 'rtl' : 'ltr'} >
-                <Box className={styles.illustration}>
+                <Box
+                    className={styles.illustration}
+                    data-modal-drag-handle
+                >
                     <img
                         src={unhappyBrowser}
                         draggable={false}
@@ -48,7 +52,10 @@ const BrowserModal = ({intl, ...props}) => {
                 </Box>
 
                 <Box className={styles.body}>
-                    <h2 className={styles.title}>
+                    <h2
+                        className={styles.title}
+                        data-modal-drag-handle
+                    >
                         <FormattedMessage {...title} />
                     </h2>
 
@@ -120,7 +127,7 @@ const BrowserModal = ({intl, ...props}) => {
                     {/* eslint-enable max-len */}
                 </Box>
             </div>
-        </ReactModal>
+        </DraggableModal>
     );
 };
 
@@ -132,6 +139,6 @@ BrowserModal.propTypes = {
 
 const WrappedBrowserModal = injectIntl(BrowserModal);
 
-WrappedBrowserModal.setAppElement = ReactModal.setAppElement;
+WrappedBrowserModal.setAppElement = setAppElement;
 
 export default WrappedBrowserModal;

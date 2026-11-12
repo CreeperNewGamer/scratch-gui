@@ -34,7 +34,7 @@ import {
 import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
 import {setConnectionModalExtensionId} from '../reducers/connection-modal';
 import {updateMetrics} from '../reducers/workspace-metrics';
-import {isTimeTravel2020} from '../reducers/time-travel';
+import {setCatBlocksEnabled} from '../lib/cat-blocks';
 
 import {
     activateTab,
@@ -89,7 +89,7 @@ const DroppableBlocks = DropAreaHOC([
 class Blocks extends React.Component {
     constructor (props) {
         super(props);
-        this.ScratchBlocks = VMScratchBlocks(props.vm, false);
+        this.ScratchBlocks = VMScratchBlocks(props.vm, props.useCatBlocks);
 
         window.ScratchBlocks = this.ScratchBlocks;
         AddonHooks.blockly = this.ScratchBlocks;
@@ -238,12 +238,32 @@ class Blocks extends React.Component {
             this.props.extensionLibraryVisible !== nextProps.extensionLibraryVisible ||
             this.props.customProceduresVisible !== nextProps.customProceduresVisible ||
             this.props.locale !== nextProps.locale ||
+            this.props.useCatBlocks !== nextProps.useCatBlocks ||
             this.props.anyModalVisible !== nextProps.anyModalVisible ||
             this.props.stageSize !== nextProps.stageSize ||
             this.props.customStageSize !== nextProps.customStageSize
         );
     }
     componentDidUpdate (prevProps) {
+        // Redraw every block when switching between default and cat blocks.
+        if (this.props.useCatBlocks !== prevProps.useCatBlocks) {
+            setCatBlocksEnabled(this.ScratchBlocks, this.props.useCatBlocks);
+            this.props.vm.refreshWorkspace();
+            // Force the palette to be recreated so its blocks update too.
+            const flyout = this.workspace.getFlyout();
+            if (flyout) {
+                this.ScratchBlocks.Events.disable();
+                const flyoutWorkspace = flyout.getWorkspace();
+                this.ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(
+                    this.ScratchBlocks.Xml.workspaceToDom(flyoutWorkspace),
+                    flyoutWorkspace
+                );
+                this.workspace.getToolbox().refreshSelection();
+                this.workspace.toolboxRefreshEnabled_ = true;
+                this.ScratchBlocks.Events.enable();
+            }
+        }
+
         // If any modals are open, call hideChaff to close z-indexed field editors
         if (this.props.anyModalVisible && !prevProps.anyModalVisible) {
             this.ScratchBlocks.hideChaff();
@@ -813,7 +833,7 @@ const mapStateToProps = state => ({
     toolboxXML: state.scratchGui.toolbox.toolboxXML,
     customProceduresVisible: state.scratchGui.customProcedures.active,
     workspaceMetrics: state.scratchGui.workspaceMetrics,
-    useCatBlocks: isTimeTravel2020(state)
+    useCatBlocks: state.scratchGui.theme.theme.catBlocks
 });
 
 const mapDispatchToProps = dispatch => ({

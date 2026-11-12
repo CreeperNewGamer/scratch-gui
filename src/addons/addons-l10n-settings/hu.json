@@ -1,7 +1,4 @@
 {
-    "cat-blocks/@info-watch": "A \"Figyeld az egérmutatót\" opció hatással lehet a teljesítményre, miközben a szerkesztő meg van nyitva.",
-    "cat-blocks/@name": "Cica-blokkok",
-    "cat-blocks/@settings-name-watch": "Figyeld az egérmutatót",
     "editor-devtools/@description": "Hozzáad új menüopciókat a szerkesztőhöz: másolj/illessz be blokkokat, jobb rendrakás, és még sok más!",
     "editor-devtools/@name": "Fejlesztői eszközök",
     "editor-devtools/@settings-name-enableCleanUpPlus": "Fejlesztett \"Rendrakás\"",

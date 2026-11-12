@@ -25,6 +25,7 @@ import {
     closeCostumeLibrary,
     closeBackdropLibrary,
     closeTelemetryModal,
+    openAddonSettingsModal,
     openExtensionLibrary
 } from '../reducers/modals';
 
@@ -186,6 +187,8 @@ const mapStateToProps = state => {
         settingsModalVisible: state.scratchGui.modals.settingsModal,
         customExtensionModalVisible: state.scratchGui.modals.customExtensionModal,
         fontsModalVisible: state.scratchGui.modals.fontsModal,
+        addonSettingsModalVisible: state.scratchGui.modals.addonSettingsModal,
+        addonSettingsFocus: state.scratchGui.modals.addonSettingsFocus,
         unknownPlatformModalVisible: state.scratchGui.modals.unknownPlatformModal,
         invalidProjectModalVisible: state.scratchGui.modals.invalidProjectModal,
         vm: state.scratchGui.vm
@@ -197,6 +200,7 @@ const mapDispatchToProps = dispatch => ({
     onActivateTab: tab => dispatch(activateTab(tab)),
     onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
+    onClickAddonSettings: addonId => dispatch(openAddonSettingsModal(addonId)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
     onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal())

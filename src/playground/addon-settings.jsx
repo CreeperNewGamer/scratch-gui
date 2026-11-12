@@ -17,6 +17,7 @@
 import React from 'react';
 import downloadBlob from '../lib/download-blob.js';
 import Settings from '../addons/settings/settings.jsx';
+import '../addons/settings/page.css';
 import render from './app-target';
 
 const onExportSettings = settings => {

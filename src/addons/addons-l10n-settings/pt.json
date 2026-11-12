@@ -1,6 +1,4 @@
 {
-    "cat-blocks/@name": "Blocos de gato",
-    "cat-blocks/@settings-name-watch": "Monitorar ponteiro do mouse",
     "editor-devtools/@name": "Ferramentas de desenvolvedor",
     "editor-devtools/@settings-name-enableCleanUpPlus": "Melhorar opção \"Limpar Blocos\"",
     "editor-devtools/@settings-name-enablePasteBlocksAtMouse": "Colar blocos na posição do mouse",

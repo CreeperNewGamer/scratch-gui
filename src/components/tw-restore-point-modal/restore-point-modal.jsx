@@ -2,6 +2,7 @@ import {defineMessages, FormattedMessage, intlShape, injectIntl} from 'react-int
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from '../../containers/modal.jsx';
+import restoreIcon from '../sound-editor/icon--undo.svg';
 import RestorePoint from './restore-point.jsx';
 import styles from './restore-point-modal.css';
 import classNames from 'classnames';
@@ -83,6 +84,7 @@ const RestorePointModal = props => (
         className={styles.modalContent}
         onRequestClose={props.onClose}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={restoreIcon}
         id="restorePointModal"
     >
         <div className={styles.body}>

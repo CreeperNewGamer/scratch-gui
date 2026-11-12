@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Box from '../box/box.jsx';
 import Modal from '../../containers/modal.jsx';
+import lockIcon from '../../lib/assets/dialog-icons/lock.svg';
 import SecurityModals from '../../lib/tw-security-manager-constants';
 import LoadExtensionModal from './load-extension.jsx';
 import FetchModal from './fetch.jsx';
@@ -34,6 +35,7 @@ const SecurityManagerModalComponent = props => (
         className={styles.modalContent}
         onRequestClose={props.enableButtons ? props.onDenied : noop}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={lockIcon}
         id="securitymanagermodal"
     >
         <Box className={styles.body}>

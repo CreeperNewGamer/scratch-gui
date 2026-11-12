@@ -1,12 +1,43 @@
 import LazyScratchBlocks from './tw-lazy-scratch-blocks';
+import {patchCatBlocks} from './cat-blocks';
+
+// Input shadow block opcodes that should use Scratch 2.0-style square shapes.
+// This was previously provided by the "Square block inputs" addon.
+// Number inputs intentionally keep their round shape.
+const SQUARE_INPUT_OPCODES = {
+    text: true,
+    argument_editor_string_number: true,
+    colour_picker: true
+};
+
+let squareInputsPatched = false;
+const patchSquareBlockInputs = ScratchBlocks => {
+    if (squareInputsPatched) return;
+    squareInputsPatched = true;
+
+    const originalJsonInit = ScratchBlocks.BlockSvg.prototype.jsonInit;
+    ScratchBlocks.BlockSvg.prototype.jsonInit = function (json) {
+        if (SQUARE_INPUT_OPCODES[this.type]) {
+            originalJsonInit.call(this, {
+                ...json,
+                outputShape: ScratchBlocks.OUTPUT_SHAPE_SQUARE
+            });
+        } else {
+            originalJsonInit.call(this, json);
+        }
+    };
+};
 
 /**
  * Connect scratch blocks with the vm
  * @param {VirtualMachine} vm - The scratch vm
+ * @param {boolean} useCatBlocks - Whether to render cat hat blocks
  * @return {ScratchBlocks} ScratchBlocks connected with the vm
  */
-export default function (vm) {
+export default function (vm, useCatBlocks) {
     const ScratchBlocks = LazyScratchBlocks.get();
+    patchCatBlocks(ScratchBlocks, useCatBlocks);
+    patchSquareBlockInputs(ScratchBlocks);
     const jsonForMenuBlock = function (name, menuOptionsFn, colors, start) {
         return {
             message0: '%1',

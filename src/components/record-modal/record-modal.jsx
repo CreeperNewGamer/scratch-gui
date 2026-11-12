@@ -5,6 +5,7 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import RecordingStep from '../../containers/recording-step.jsx';
 import PlaybackStep from '../../containers/playback-step.jsx';
 import Modal from '../../containers/modal.jsx';
+import soundIcon from '../asset-panel/icon--sound.svg';
 import styles from './record-modal.css';
 
 const messages = defineMessages({
@@ -19,6 +20,7 @@ const RecordModal = props => (
     <Modal
         className={styles.modalContent}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={soundIcon}
         onRequestClose={props.onCancel}
     >
         <Box className={styles.body}>

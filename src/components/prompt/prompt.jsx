@@ -6,6 +6,7 @@ import React from 'react';
 import Box from '../box/box.jsx';
 import Modal from '../../containers/modal.jsx';
 
+import editIcon from '../menu-bar/icon--edit.svg';
 import styles from './prompt.css';
 import {SCRATCH_MAX_CLOUD_VARIABLES} from '../../lib/tw-cloud-limits.js';
 import isScratchDesktop from '../../lib/isScratchDesktop.js';
@@ -56,6 +57,7 @@ const PromptComponent = props => (
     <Modal
         className={styles.modalContent}
         contentLabel={props.title}
+        headerIcon={editIcon}
         onRequestClose={props.onCancel}
         id="promptModal"
     >

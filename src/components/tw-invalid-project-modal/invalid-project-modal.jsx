@@ -2,6 +2,7 @@ import {defineMessages, FormattedMessage, intlShape, injectIntl} from 'react-int
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from '../../containers/modal.jsx';
+import warningIcon from '../../lib/assets/dialog-icons/warning.svg';
 import styles from './invalid-project-modal.css';
 
 const messages = defineMessages({
@@ -35,6 +36,7 @@ const InvalidProjectModal = props => (
         className={styles.modalContent}
         onRequestClose={props.onClose}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={warningIcon}
         id="invalidProjectModal"
     >
         <div className={styles.body}>

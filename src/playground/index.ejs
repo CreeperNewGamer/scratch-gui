@@ -38,11 +38,11 @@
       .splash-spinner:after {
         content: " ";
         display: block;
-        width: 64px;
-        height: 64px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
-        border: 6px solid;
-        border-color: currentColor transparent currentColor transparent;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-top-color: #fff;
         animation: splash-spinner 1.2s linear infinite;
       }
       @keyframes splash-spinner {
@@ -98,7 +98,7 @@
         'use strict';
 
         var theme = '';
-        var accent = '#ff4c4c';
+        var accent = '#657381';
 
         try {
           var themeSetting = localStorage.getItem('tw:theme');
@@ -116,6 +116,10 @@
               accent = '#855cd6';
             } else if (parsed.accent === 'blue') {
               accent = '#4c97ff';
+            } else if (parsed.accent === 'red') {
+              accent = '#ff4c4c';
+            } else if (parsed.accent === 'gray') {
+              accent = '#657381';
             }
             if (parsed.gui === 'dark' || parsed.gui === 'light') {
               theme = parsed.gui;
@@ -132,12 +136,9 @@
         var splash = document.querySelector('.spash-waiting-for-js');
         splash.setAttribute('data-theme', theme);
         if (theme !== 'dark') {
-          <% if (htmlWebpackPlugin.options.isEditor) { %>
-            splash.style.backgroundColor = accent;
-            splash.style.color = 'white';
-          <% } else { %>
-            splash.style.color = accent;
-          <% } %>
+          // Use the accent as the splash background so the white loader stays visible.
+          splash.style.backgroundColor = accent;
+          splash.style.color = 'white';
         }
         splash.hidden = false;
 

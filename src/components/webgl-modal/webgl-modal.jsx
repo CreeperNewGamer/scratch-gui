@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactModal from 'react-modal';
-import Box from '../box/box.jsx';
 import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import Box from '../box/box.jsx';
+import DraggableModal from '../modal/draggable-modal.jsx';
 
 import styles from './webgl-modal.css';
 
@@ -15,7 +15,7 @@ const messages = defineMessages({
 });
 
 const WebGlModal = ({intl, ...props}) => (
-    <ReactModal
+    <DraggableModal
         isOpen
         className={styles.modalContent}
         contentLabel={intl.formatMessage({...messages.label})}
@@ -23,10 +23,13 @@ const WebGlModal = ({intl, ...props}) => (
         onRequestClose={props.onBack}
     >
         <div dir={props.isRtl ? 'rtl' : 'ltr'}>
-            <Box className={styles.illustration} />
+            <Box
+                className={styles.illustration}
+                data-modal-drag-handle
+            />
 
             <Box className={styles.body}>
-                <h2>
+                <h2 data-modal-drag-handle>
                     <FormattedMessage {...messages.label} />
                 </h2>
                 <p>
@@ -89,7 +92,7 @@ const WebGlModal = ({intl, ...props}) => (
                 </div>
             </Box>
         </div>
-    </ReactModal>
+    </DraggableModal>
 );
 
 WebGlModal.propTypes = {

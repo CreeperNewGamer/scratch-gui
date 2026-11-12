@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import bindAll from 'lodash.bindall';
 import Box from '../box/box.jsx';
 import Modal from '../../containers/modal.jsx';
+import settingsIcon from '../menu-bar/icon--settings.svg';
 import FancyCheckbox from '../tw-fancy-checkbox/checkbox.jsx';
 import Input from '../forms/input.jsx';
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
@@ -437,6 +438,7 @@ const SettingsModalComponent = props => (
         className={styles.modalContent}
         onRequestClose={props.onClose}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={settingsIcon}
         id="settingsModal"
     >
         <Box className={styles.body}>

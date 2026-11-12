@@ -2,9 +2,9 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl';
-import ReactModal from 'react-modal';
 
 import Box from '../box/box.jsx';
+import DraggableModal from '../modal/draggable-modal.jsx';
 
 import styles from './telemetry-modal.css';
 
@@ -132,7 +132,7 @@ class TelemetryModal extends React.PureComponent {
         const settingWasUpdated = this.state.settingWasUpdatedTimer && (
             <FormattedMessage {...messages.settingWasUpdated} />
         );
-        return (<ReactModal
+        return (<DraggableModal
             isOpen
             className={styles.modalContent}
             contentLabel={this.props.intl.formatMessage(messages.label)}
@@ -140,7 +140,10 @@ class TelemetryModal extends React.PureComponent {
             onRequestClose={this.handleCancel}
         >
             <div dir={this.props.isRtl ? 'rtl' : 'ltr'} >
-                <Box className={styles.illustration} />
+                <Box
+                    className={styles.illustration}
+                    data-modal-drag-handle
+                />
 
                 <Box className={styles.body}>
                     <p><FormattedMessage {...messages.bodyText1} /></p>
@@ -197,7 +200,7 @@ class TelemetryModal extends React.PureComponent {
                     </Box>
                 </Box>
             </div>
-        </ReactModal>);
+        </DraggableModal>);
     }
 }
 

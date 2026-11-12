@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Box from '../box/box.jsx';
 import Modal from '../../containers/modal.jsx';
+import extensionIcon from '../gui/icon--extensions.svg';
 import FileInput from './file-input.jsx';
 import styles from './custom-extension-modal.css';
 import FancyCheckbox from '../tw-fancy-checkbox/checkbox.jsx';
@@ -21,6 +22,7 @@ const CustomExtensionModal = props => (
         className={styles.modalContent}
         onRequestClose={props.onClose}
         contentLabel={props.intl.formatMessage(messages.title)}
+        headerIcon={extensionIcon}
         id="customExtensionModal"
     >
         <Box

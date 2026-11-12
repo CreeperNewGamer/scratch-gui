@@ -7,6 +7,7 @@ import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-int
 import booleanInputIcon from './icon--boolean-input.svg';
 import textInputIcon from './icon--text-input.svg';
 import labelIcon from './icon--label.svg';
+import codeIcon from '../gui/icon--code.svg';
 
 import styles from './custom-procedures.css';
 
@@ -22,6 +23,7 @@ const CustomProcedures = props => (
     <Modal
         className={styles.modalContent}
         contentLabel={props.intl.formatMessage(messages.myblockModalTitle)}
+        headerIcon={codeIcon}
         onRequestClose={props.onCancel}
         id="customProceduresModal"
     >

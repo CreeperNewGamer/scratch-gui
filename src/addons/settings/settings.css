@@ -17,22 +17,6 @@
 @import "../../css/colors.css";
 @import "../../css/filters.css";
 
-body {
-    background-color: $page-background;
-    color: $page-foreground;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin: 0;
-}
-
-a[href] {
-    color: $link-color;
-    text-decoration: underline;
-}
-a:active, a:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px $looks-transparent;
-}
-
 .container {
     position: absolute;
     top: 0;
@@ -42,6 +26,21 @@ a:active, a:focus {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+}
+
+/* when embedded in the editor's dialog */
+.container.embedded {
+    position: relative;
+    top: auto;
+    left: auto;
+    background-color: $ui-modal-background;
+    color: $text-primary;
+}
+
+.container.embedded .addons {
+    flex: 1;
+    height: auto;
+    min-height: 0;
 }
 
 .section {
