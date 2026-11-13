@@ -1,5 +1,6 @@
 import LazyScratchBlocks from './tw-lazy-scratch-blocks';
 import {patchCatBlocks} from './cat-blocks';
+import {patchCheckboxBlocks, patchBooleanArgumentShadows} from './checkbox-blocks';
 
 // Input shadow block opcodes that should use Scratch 2.0-style square shapes.
 // This was previously provided by the "Square block inputs" addon.
@@ -38,6 +39,8 @@ export default function (vm, useCatBlocks) {
     const ScratchBlocks = LazyScratchBlocks.get();
     patchCatBlocks(ScratchBlocks, useCatBlocks);
     patchSquareBlockInputs(ScratchBlocks);
+    patchCheckboxBlocks(ScratchBlocks);
+    patchBooleanArgumentShadows(vm);
     const jsonForMenuBlock = function (name, menuOptionsFn, colors, start) {
         return {
             message0: '%1',
