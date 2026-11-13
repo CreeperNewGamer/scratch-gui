@@ -11,7 +11,173 @@ const TRUE_COLOR = '#33D833';
 const FALSE_COLOR = '#00000035';
 const CHECKBOX_FIELD_NAME = 'CHECKBOX';
 
+// Boolean inputs on vanilla Scratch blocks. Custom procedure call blocks are
+// handled separately by inspecting their mutation.
+const VANILLA_BOOLEAN_INPUTS = {
+    control_if: ['CONDITION'],
+    control_if_else: ['CONDITION'],
+    control_repeat_until: ['CONDITION'],
+    control_wait_until: ['CONDITION'],
+    control_while: ['CONDITION'],
+    operator_and: ['OPERAND1', 'OPERAND2'],
+    operator_or: ['OPERAND1', 'OPERAND2'],
+    operator_not: ['OPERAND']
+};
+
 let blocksPatched = false;
+let scratchBlocks = null;
+
+/**
+ * Build the XML for a FALSE checkbox shadow.
+ * @return {!Element} shadow XML element
+ */
+const createCheckboxShadowDom = () => {
+    const shadow = document.createElement('shadow');
+    shadow.setAttribute('type', 'checkbox');
+    const field = document.createElement('field');
+    field.setAttribute('name', CHECKBOX_FIELD_NAME);
+    field.appendChild(document.createTextNode('FALSE'));
+    shadow.appendChild(field);
+    return shadow;
+};
+
+/**
+ * Attach a checkbox shadow to every empty Boolean input in a workspace block
+ * tree. Existing shadows and real reporter blocks are left alone.
+ * @param {!Blockly.Block} rootBlock the block tree to inspect
+ * @param {function} domToBlock scratch-blocks' original Xml.domToBlock
+ */
+const ensureWorkspaceCheckboxShadows = (rootBlock, domToBlock) => {
+    if (!rootBlock || typeof rootBlock.getDescendants !== 'function') return;
+
+    const descendants = rootBlock.getDescendants(false);
+    for (const block of descendants) {
+        if (block.isShadow && block.isShadow()) continue;
+        for (const input of block.inputList) {
+            const connection = input.connection;
+            if (!connection || !connection.check_ ||
+                connection.check_.indexOf('Boolean') === -1) {
+                continue;
+            }
+            if (connection.targetBlock()) continue;
+
+            let shadowDom = connection.getShadowDom();
+            if (!shadowDom) {
+                shadowDom = createCheckboxShadowDom();
+                connection.setShadowDom(shadowDom);
+            }
+
+            const shadowBlock = domToBlock(shadowDom, block.workspace);
+            if (shadowBlock.outputConnection) {
+                connection.connect(shadowBlock.outputConnection);
+            }
+        }
+    }
+};
+
+/**
+ * Read the Boolean input names for a VM block.
+ * @param {object} block the VM block
+ * @return {Array<string>} Boolean input names
+ */
+const getVmBooleanInputs = block => {
+    if (!block || !block.opcode) return [];
+
+    const inputs = VANILLA_BOOLEAN_INPUTS[block.opcode];
+    if (inputs) return inputs;
+
+    if (block.opcode === 'procedures_call' && block.mutation) {
+        const {proccode, argumentids} = block.mutation;
+        if (typeof proccode !== 'string' || typeof argumentids !== 'string') {
+            return [];
+        }
+
+        let ids;
+        try {
+            ids = JSON.parse(argumentids);
+        } catch (e) {
+            return [];
+        }
+        if (!Array.isArray(ids)) return [];
+
+        const result = [];
+        const components = proccode.split(/(?=[^\\]%[nbs])/);
+        let argumentIndex = 0;
+        for (const component of components) {
+            if (component.charAt(0) !== '%') continue;
+            const argumentType = component.charAt(1);
+            if (argumentType === 'b' && ids[argumentIndex]) {
+                result.push(ids[argumentIndex]);
+            }
+            argumentIndex++;
+        }
+        return result;
+    }
+
+    return [];
+};
+
+/**
+ * Make sure the VM's current editing target has checkbox shadow blocks for
+ * vanilla Boolean inputs. The workspace is generated from this data, so the
+ * shadows need to exist in the VM for running, saving, and loading projects.
+ * @param {VirtualMachine} vm the scratch vm
+ * @return {boolean} whether any shadows were added
+ */
+const ensureVmCheckboxShadows = vm => {
+    const target = vm.editingTarget;
+    if (!target || !target.blocks || !target.blocks._blocks) return false;
+
+    const blockContainer = target.blocks;
+    const blocks = blockContainer._blocks;
+    let changed = false;
+
+    for (const id of Object.keys(blocks)) {
+        const block = blocks[id];
+        if (!block || block.shadow || !block.opcode) continue;
+
+        const inputNames = getVmBooleanInputs(block);
+        if (inputNames.length === 0) continue;
+
+        if (!block.inputs) block.inputs = {};
+        for (const name of inputNames) {
+            let input = block.inputs[name];
+            if (input && input.shadow && blocks[input.shadow]) continue;
+
+            const shadowId = (scratchBlocks && scratchBlocks.utils) ?
+                scratchBlocks.utils.genUid() :
+                `checkboxShadow_${Date.now()}_${Math.random()}`;
+
+            blocks[shadowId] = {
+                id: shadowId,
+                opcode: 'checkbox',
+                inputs: {},
+                fields: {
+                    [CHECKBOX_FIELD_NAME]: {
+                        name: CHECKBOX_FIELD_NAME,
+                        value: 'FALSE'
+                    }
+                },
+                next: null,
+                topLevel: false,
+                parent: block.id,
+                shadow: true
+            };
+
+            if (!input) {
+                input = {name: name, block: null, shadow: null};
+                block.inputs[name] = input;
+            }
+            input.shadow = shadowId;
+            changed = true;
+        }
+    }
+
+    if (changed && typeof blockContainer.resetCache === 'function') {
+        blockContainer.resetCache();
+    }
+    return changed;
+};
 
 const updateCheckColor = field => {
     const sourceBlock = field.sourceBlock_;
@@ -40,6 +206,7 @@ const updateCheckColor = field => {
 const patchCheckboxBlocks = ScratchBlocks => {
     if (blocksPatched) return;
     blocksPatched = true;
+    scratchBlocks = ScratchBlocks;
 
     const Field = ScratchBlocks.Field;
 
@@ -208,7 +375,45 @@ const patchBooleanArgumentShadows = vm => {
     };
 };
 
+let workspacePatched = false;
+/**
+ * Add a checkbox shadow to every empty Boolean input as workspace blocks are
+ * created. This covers toolbox/flyout blocks, duplicated blocks, and blocks
+ * loaded from XML.
+ * @param {object} ScratchBlocks the scratch-blocks module
+ */
+const patchWorkspaceCheckboxShadows = ScratchBlocks => {
+    if (workspacePatched) return;
+    workspacePatched = true;
+
+    const originalDomToBlock = ScratchBlocks.Xml.domToBlock;
+    ScratchBlocks.Xml.domToBlock = function (xmlBlock, workspace) {
+        const block = originalDomToBlock.call(this, xmlBlock, workspace);
+        ensureWorkspaceCheckboxShadows(block, originalDomToBlock);
+        return block;
+    };
+};
+
+/**
+ * Make sure the VM includes checkbox shadows for vanilla Boolean inputs.
+ * emitWorkspaceUpdate is used as the synchronization point because it is
+ * called when projects, sprites, and editing targets are loaded.
+ * @param {VirtualMachine} vm the scratch vm
+ */
+const patchVmCheckboxShadows = vm => {
+    if (vm._twVanillaCheckboxPatched) return;
+    vm._twVanillaCheckboxPatched = true;
+
+    const originalEmitWorkspaceUpdate = vm.emitWorkspaceUpdate;
+    vm.emitWorkspaceUpdate = function (...args) {
+        ensureVmCheckboxShadows(this);
+        return originalEmitWorkspaceUpdate.apply(this, args);
+    };
+};
+
 export {
     patchCheckboxBlocks,
-    patchBooleanArgumentShadows
+    patchBooleanArgumentShadows,
+    patchWorkspaceCheckboxShadows,
+    patchVmCheckboxShadows
 };
