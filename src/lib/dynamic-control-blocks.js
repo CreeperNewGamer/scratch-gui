@@ -23,6 +23,19 @@ let patched = false;
 let ShapeButtonField = null;
 
 /**
+ * Check whether a block is a real block on the workspace. Shadow blocks and
+ * the insertion markers shown while dragging are throwaway copies, so they
+ * must not build their own inputs, shadows or VM records.
+ * @param {!Blockly.Block} block the block to inspect
+ * @return {boolean} whether the block is a real workspace block
+ */
+const isRealBlock = block => {
+    if (typeof block.isShadow === 'function' && block.isShadow()) return false;
+    if (typeof block.isInsertionMarker === 'function' && block.isInsertionMarker()) return false;
+    return true;
+};
+
+/**
  * Read the branch layout of an if block.
  * @param {!Blockly.Block} block the block to inspect
  * @return {object} Branch state with itemCount and isElse.
@@ -416,6 +429,7 @@ const materializeShadowList = block => {
  * @param {!Blockly.Block} block the block to inspect
  */
 const materializeShadows = block => {
+    if (!isRealBlock(block)) return;
     if (!ScratchBlocks.Events.isEnabled()) {
         materializeShadowList(block);
         return;
@@ -507,6 +521,7 @@ const scheduleSync = block => {
  * @param {!Array.<object>} specs input specs, in order
  */
 const applyShape = (block, specs) => {
+    if (!isRealBlock(block)) return;
     const nameSet = {};
     const rebuildSet = {};
     for (const spec of specs) {
@@ -557,6 +572,7 @@ const applyShape = (block, specs) => {
  * @param {!Array.<object>} specs input specs, in order
  */
 const updateShape = (block, specs) => {
+    if (!isRealBlock(block)) return;
     withMutationChange(block, () => applyShape(block, specs));
     scheduleSync(block);
 };
