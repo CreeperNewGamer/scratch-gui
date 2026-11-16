@@ -415,5 +415,7 @@ export {
     patchCheckboxBlocks,
     patchBooleanArgumentShadows,
     patchWorkspaceCheckboxShadows,
-    patchVmCheckboxShadows
+    patchVmCheckboxShadows,
+    ensureWorkspaceCheckboxShadows,
+    createCheckboxShadowDom
 };

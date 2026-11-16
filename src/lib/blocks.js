@@ -1,5 +1,6 @@
 import LazyScratchBlocks from './tw-lazy-scratch-blocks';
 import {patchCatBlocks} from './cat-blocks';
+import {patchDynamicControlBlocks} from './dynamic-control-blocks';
 import {
     patchCheckboxBlocks,
     patchBooleanArgumentShadows,
@@ -48,6 +49,7 @@ export default function (vm, useCatBlocks) {
     patchWorkspaceCheckboxShadows(ScratchBlocks);
     patchBooleanArgumentShadows(vm);
     patchVmCheckboxShadows(vm);
+    patchDynamicControlBlocks(ScratchBlocks, vm);
     const jsonForMenuBlock = function (name, menuOptionsFn, colors, start) {
         return {
             message0: '%1',
